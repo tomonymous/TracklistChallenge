@@ -1,0 +1,34 @@
+{% extends 'Quiz/base.html' %}
+
+{% block content %}
+    <h2 class="my-3" style="  text-align: center; font-size: 30px">Select Album</h2>
+    <div class="row">
+        {% for album in albums %}
+            <div class="card-columns mx-auto d-flex justify-content-center ">      
+                <div class="card text-white  mb-3 mx-1" style="width: 10rem; border-color: #ff9800;">
+                    <div class="card-body">
+                        <form  action="quiz" >
+                            <input type="hidden" name="album_id" value="{{ album.album_id }}" >
+                            <button class="btn btn-primary stretched-link" style="font-family: Helvetica Neue; font-size:large; width: 100%; outline: 0; border: none; background-color: transparent; color:whitesmoke" type="submit">{{ album.title }}</button>
+                        </form>
+                        <p class="card-text" style="font-family: Helvetica Neue; color:salmon; text-align: center">{{ album.type | add:album.date }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/cards.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+    <meta name="title" content="The Tracklist Challenge">
+
+    <meta property="og:title" content="The Tracklist Challenge">
+  
+    <meta property="og:description" content="How many tracks from {{ artist }}'s Albums can you name?">
+    <meta name="description" content="How many tracks from {{ artist }}'s Albums can you name?">
+
+    <!-- <meta property="og:image" content="{{ cover }}"/> -->
+    <title>The Tracklist Challenge</title>
+{% endblock %}

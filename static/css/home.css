@@ -1,0 +1,39 @@
+.bg-dark {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+  
+    display: flex;
+    align-items: center;
+  }
+
+.navbar-header {
+    float: left;
+    padding: 1px;
+    text-align: center;
+    width: 100%;
+}
+.navbar-brand {
+    float:none;
+    color: whitesmoke;
+}
+.navbar-brand:hover{
+    color: whitesmoke!important;
+}
+.btn {
+    border: 2px solid;
+    background-color: transparent;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* Orange */
+.warning {
+    border-color: #ff9800;
+    color: orange;
+  }
+  
+  .warning:hover {
+    background: #ff9800;
+    color: white;
+  }

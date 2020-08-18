@@ -1,0 +1,7 @@
+.form-inline .form-control { 
+    display: inline-block !important; 
+    width: auto!important;
+    vertical-align: middle;
+}
+
+.container { padding-top: 10px; }

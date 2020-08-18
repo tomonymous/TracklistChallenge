@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+
+  </head>
+  <body class="bg-dark text-white ">
+    <nav class="navbar navbar-dark navbar-fixed-top">
+      <a class="navbar-brand" style="font-family: Helvetica Neue; font-size: 24px;" href='/'>TheTracklistChallenge.</a>
+      <form class="form-inline mx-0" action="search" style='width: 250px;'>
+        <input class="form-control ml-1 mr-0 "style="height:30px" type="search" placeholder="Find Artist" aria-label="Search" name="query">
+        <button class="btn btn-outline-warning my-2 my-sm-0 ml-1 mr-1" style="height:30px; padding:0px 5px"type="submit">Go</button>
+      </form>
+      <form class="form-inline mx-0 " id="album-form"action="albums">
+        <input class="form-control ml-1 mr-0 " style="height:30px"type="search" placeholder="Find Album" aria-label="Search" name="query">
+        <button class="btn btn-outline-warning my-2 my-sm-0 ml-1 mr-1" style="height:30px; padding:0px 5px"type="submit">Go</button>
+      </form>
+
+    </nav>
+
+    <div class="container">
+          {% block content %}
+          {% endblock %}
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js" integrity="sha384-XEerZL0cuoUbHE4nZReLT7nx9gQrQreJekYhJD9WNWhH8nEW+0c5qq7aIo2Wl30J" crossorigin="anonymous"></script>
+  </body>
+</html>
