@@ -49,12 +49,7 @@ pinterestButton = document.getElementById("pinterest-button");
 
 fixedString = unicodeToChar(trackString.replace('[', '').replace(']', '')).substr(1).replace(/‘/g, '\'').replace(/’/g, '\'').replace(/‐/g,'-').replace(/…/g,'...');
 var tracks = fixedString.substring(0, fixedString.length - 1).split("\"\, \"", );
-var tracksNoPunctuation = new Array(); //second array with no punctuation for easier guessing
-for(i=0;i<tracks.length;i++){
-     punctuationless1 = tracks[i].replace(/-/g," ");
-     punctuationless = punctuationless1.replace(/[.…,\/#!?’$%\^&\*;:'{}=\‐_`~()]/g,"");
-     tracksNoPunctuation[i] = punctuationless.replace(/\s{2,}/g," ");
-}
+
 
 var trackGuesses = new Array();
 var discTrackNumbers = new Array();
@@ -91,17 +86,8 @@ for(i = 0; i< tracks.length; i++){
     }
 }
 
-altTracksNoPunctuation = new Array();
-for(i=0;i<alternateTitles.length;i++){
-    temp = alternateTitles[i].title.slice(0);
-    punctuationless = temp.replace(/[.…,\/#!?’'$%\^&\*;:{}=\-_`~()]/g,"");
-    altTracksNoPunctuation[i] = new AlternateTitle(alternateTitles[i].position, punctuationless.replace(/\s{2,}/g," "));
-}
-
 originalTracks = tracks.slice(0); //store Arrays for reset
 originalAltTitles = alternateTitles.slice(0);
-originalNoPunctuation = tracksNoPunctuation.slice(0);
-originalAltNoPunctuation  = altTracksNoPunctuation.slice(0);
 
 finalResultString = "";
 finishTime = 0;
@@ -109,9 +95,7 @@ ranOnceAtGameOver = false;
 answersVisable = false;
 
 //console.log(originalTracks); 
-//console.log(originalAltTitles); 
-//console.log(originalNoPunctuation);
-//console.log(originalAltNoPunctuation); 
+//console.log(originalAltTitles);
 
 // Initialise Game
 function init() {
@@ -207,22 +191,17 @@ function matchWords(){
             songInput.value = '';
         }
     });
-    normailzedInput = stripThe(songInput.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().trim());
-    var songIndex = tracks.findIndex(item => normailzedInput === stripThe(item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()))
-    if(songIndex == -1){
-        songIndex = tracksNoPunctuation.findIndex(item => normailzedInput === stripThe(item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()))
-    }
+    normailzedInput = strip(songInput.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().trim());
+    var songIndex = tracks.findIndex(item => normailzedInput === strip(item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()));
+
     if(songIndex > -1){ //if there's a match in the main set
         tracklistDisplay.innerHTML = updateDisplay(songIndex);
-        //message.innerHTML = 'Correct';
 
-        //marks songs as found in standard and punctuation free lists and removes from alt list
+        //marks songs as found in standard list and removes from alt list
         tracks[songIndex] = randomString;
-        tracksNoPunctuation[songIndex] = randomString;
         for(h=0;h<alternateTitles.length;h++){
             if(alternateTitles[h].position == songIndex){
                 alternateTitles.splice(h,1);
-                altTracksNoPunctuation.splice(h,1);
                 h--;
             }
         }
@@ -230,18 +209,15 @@ function matchWords(){
     } else{
         if(includesParenthesis){ //check for matches in alternate title set
             for(i=0;i<alternateTitles.length;i++){
-                if(stripThe(alternateTitles[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()) == normailzedInput ||
-                    stripThe(altTracksNoPunctuation[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()) == normailzedInput){
+                if(strip(alternateTitles[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()) == normailzedInput){
                     index = alternateTitles[i].position;
                     tracklistDisplay.innerHTML = updateDisplay(index);
 
                     //remove match from main and alternate sets
                     tracks[index] = randomString;
-                    tracksNoPunctuation[index] = randomString;
                     for(h=0;h<alternateTitles.length;h++){
                         if(alternateTitles[h].position == index){
                             alternateTitles.splice(h,1);
-                            altTracksNoPunctuation.splice(h,1);
                             h--;
                         }
                     }
@@ -289,8 +265,6 @@ function giveUp(){
 function reset(){
     tracks = originalTracks.slice(0);
     alternateTitles = originalAltTitles.slice(0);
-    tracksNoPunctuation = originalNoPunctuation.slice(0);
-    altTracksNoPunctuation = originalAltNoPunctuation.slice(0);
     score = 0;
     scoreDisplay.innerHTML = score;
     time = timelimit;
@@ -447,4 +421,14 @@ function stripThe(phrase){
     else{
         return phrase
     }
+}
+
+function stripPunctuation(phrase){
+    punctuationless1 = phrase.replace(/-/g," ");
+    punctuationless = punctuationless1.replace(/[.…,\/#!?’$%\^&\*;:'{}=\‐_`~()]/g,"");
+    return punctuationless.replace(/\s{2,}/g," ");
+}
+
+function strip(phrase){
+    return stripThe(stripPunctuation(phrase))
 }
