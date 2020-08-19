@@ -60,18 +60,23 @@ def quiz(request):
     release_group = musicbrainzngs.get_release_group_by_id(query, includes=['releases'])
     release_index = 0
     for release in release_group['release-group']['release-list']: #avoid deluxe editions with additional tracks. 
-        if "deluxe" in release['title'].lower():
+        if "deluxe" in release['title'].lower() or "special edition" in release['title'].lower():
             release_index += 1
         else:
             try:
-                if release['disambiguation'].find('delux') > -1: 
-                    release_index +=1
+                disambiguation = release['disambiguation'].lower()
             except:
+                disambiguation = 'this seems perfectly acceptable'
+            if disambiguation.find('deluxe') > -1: 
+                    release_index +=1
+            elif disambiguation.find('special') > -1:
+                    release_index +=1
+            else:
                 break
-            break
+            
     if release_index >= len(release_group['release-group']['release-list']):
         release_index = 0
-
+    
     release = musicbrainzngs.get_release_by_id(release_group['release-group']['release-list'][release_index]['id'], includes=['recordings', 'artists'])
     title = release_group['release-group']['release-list'][release_index]['title']
     try:
@@ -108,7 +113,7 @@ def album_search(request):
         except:
             new_album.artist = "Unknown Artist"
         try:
-            new_album.date = ", " + release["date"]
+            new_album.date = ", " + release["disambiguation"]
         except:
             new_album.date = ""
         try:

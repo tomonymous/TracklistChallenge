@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'TrackQuiz.urls'
+ROOT_URLCONF = 'TracklistChallenge.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'TrackQuiz.wsgi.application'
+WSGI_APPLICATION = 'TracklistChallenge.wsgi.application'
 
 
 # Database

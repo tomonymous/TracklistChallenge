@@ -194,21 +194,22 @@ function matchWords(){
             songInput.value = '';
         }
     });
-    normailzedInput = songInput.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-    var songIndex = tracks.findIndex(item => normailzedInput === item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase())
+    normailzedInput = stripThe(songInput.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().trim());
+    var songIndex = tracks.findIndex(item => normailzedInput === stripThe(item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()))
     if(songIndex == -1){
-        songIndex = tracksNoPunctuation.findIndex(item => normailzedInput === item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase())
+        songIndex = tracksNoPunctuation.findIndex(item => normailzedInput === stripThe(item.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()))
     }
     if(songIndex > -1){ //if there's a match in the main set
         tracklistDisplay.innerHTML = updateDisplay(songIndex);
         //message.innerHTML = 'Correct';
 
-        //removes instances of song
+        //marks songs as found in standard and punctuation free lists and removes from alt list
         tracks[songIndex] = randomString;
         tracksNoPunctuation[songIndex] = randomString;
         for(h=0;h<alternateTitles.length;h++){
             if(alternateTitles[h].position == songIndex){
                 alternateTitles.splice(h,1);
+                altTracksNoPunctuation.splice(h,1);
                 h--;
             }
         }
@@ -216,8 +217,8 @@ function matchWords(){
     } else{
         if(includesParenthesis){ //check for matches in alternate title set
             for(i=0;i<alternateTitles.length;i++){
-                if(alternateTitles[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() == normailzedInput ||
-                    altTracksNoPunctuation[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() == normailzedInput){
+                if(stripThe(alternateTitles[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()) == normailzedInput ||
+                    stripThe(altTracksNoPunctuation[i].title.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()) == normailzedInput){
                     index = alternateTitles[i].position;
                     tracklistDisplay.innerHTML = updateDisplay(index);
 
@@ -425,3 +426,12 @@ function unicodeToChar(text) {
                 return String.fromCharCode(parseInt(match.replace(/\\u/g, ''), 16));
            });
  }
+
+function stripThe(phrase){
+    if(phrase.toLowerCase().startsWith('the ')){
+        return phrase.substring(4);
+    }
+    else{
+        return phrase
+    }
+}

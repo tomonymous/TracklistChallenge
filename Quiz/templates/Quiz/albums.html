@@ -11,7 +11,7 @@
                             <input type="hidden" name="album_id" value="{{ album.album_id }}" >
                             <button class="btn btn-primary stretched-link" style="font-family: Helvetica Neue; font-size:large; width: 100%; outline: 0; border: none; background-color: transparent; color:whitesmoke" type="submit">{{ album.title }}</button>
                         </form>
-                        <p class="card-text" style="font-family: Helvetica Neue; color:salmon; text-align: center">{{ album.artist | add:album.type }}</p>
+                        <p id="album-description" class="card-text" style="font-family: Helvetica Neue; color:salmon; text-align: center; ">{{ album.artist | add:album.type | add:album.date  }}</p>
                     </div>
                 </div>
             </div>
