@@ -47,12 +47,12 @@ redditButton = document.getElementById("reddit-button");
 emailButton = document.getElementById("email-button");
 pinterestButton = document.getElementById("pinterest-button");
 
-fixedString = unicodeToChar(trackString.replace('[', '').replace(']', '')).substr(1).replace(/‘/g, '\'').replace(/’/g, '\'').replace(/‐/g,'-');
+fixedString = unicodeToChar(trackString.replace('[', '').replace(']', '')).substr(1).replace(/‘/g, '\'').replace(/’/g, '\'').replace(/‐/g,'-').replace(/…/g,'...');
 var tracks = fixedString.substring(0, fixedString.length - 1).split("\"\, \"", );
 var tracksNoPunctuation = new Array(); //second array with no punctuation for easier guessing
 for(i=0;i<tracks.length;i++){
      punctuationless1 = tracks[i].replace(/-/g," ");
-     punctuationless = punctuationless1.replace(/[.,\/#!?’$%\^&\*;:'{}=\‐_`~()]/g,"");
+     punctuationless = punctuationless1.replace(/[.…,\/#!?’$%\^&\*;:'{}=\‐_`~()]/g,"");
      tracksNoPunctuation[i] = punctuationless.replace(/\s{2,}/g," ");
 }
 
@@ -85,12 +85,16 @@ for(i = 0; i< tracks.length; i++){
             
         }
     }
+    if(tracks[i].includes('&')){
+        alternateTitles[alternateTitles.length] = new AlternateTitle(i, tracks[i].replace(/&/g, ' and ').replace(/\'  \'/g, ' '));
+        includesParenthesis = true;
+    }
 }
 
 altTracksNoPunctuation = new Array();
 for(i=0;i<alternateTitles.length;i++){
     temp = alternateTitles[i].title.slice(0);
-    punctuationless = temp.replace(/[.,\/#!?’'$%\^&\*;:{}=\-_`~()]/g,"");
+    punctuationless = temp.replace(/[.…,\/#!?’'$%\^&\*;:{}=\-_`~()]/g,"");
     altTracksNoPunctuation[i] = new AlternateTitle(alternateTitles[i].position, punctuationless.replace(/\s{2,}/g," "));
 }
 
@@ -99,15 +103,15 @@ originalAltTitles = alternateTitles.slice(0);
 originalNoPunctuation = tracksNoPunctuation.slice(0);
 originalAltNoPunctuation  = altTracksNoPunctuation.slice(0);
 
-console.log(originalTracks);
-console.log(originalAltTitles);
-console.log(originalNoPunctuation);
-console.log(originalAltNoPunctuation);
-
 finalResultString = "";
 finishTime = 0;
 ranOnceAtGameOver = false;
 answersVisable = false;
+
+//console.log(originalTracks); 
+//console.log(originalAltTitles); 
+//console.log(originalNoPunctuation);
+//console.log(originalAltNoPunctuation); 
 
 // Initialise Game
 function init() {
@@ -117,6 +121,7 @@ function init() {
     answersButton.style.display = "none";
     uiPanel.style.display = "none";
     songInput.style.display = "none";
+    songInput.value = '';
     timeString.innerHTML = timeConverter(time);
     displayHiddenTracks();
     if(artist == 'Unknown'){
