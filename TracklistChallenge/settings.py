@@ -25,7 +25,7 @@ SECRET_KEY = 'a4%t^$yd*d1(*h0&bqerc2r0)u)%+%d$q5=-($&hrzs+yyqq+4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.tracklistchallenge.com', 'tracklistchallenge.com']
+ALLOWED_HOSTS = ['www.tracklistchallenge.com', 'tracklistchallenge.com', '127.0.0.1' ]
 
 
 # Application definition

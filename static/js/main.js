@@ -47,13 +47,15 @@ redditButton = document.getElementById("reddit-button");
 emailButton = document.getElementById("email-button");
 pinterestButton = document.getElementById("pinterest-button");
 
-fixedString = unicodeToChar(trackString.replace('[', '').replace(']', '')).substr(1).replace(/‘/g, '\'').replace(/’/g, '\'');
+fixedString = unicodeToChar(trackString.replace('[', '').replace(']', '')).substr(1).replace(/‘/g, '\'').replace(/’/g, '\'').replace(/‐/g,'-');
 var tracks = fixedString.substring(0, fixedString.length - 1).split("\"\, \"", );
 var tracksNoPunctuation = new Array(); //second array with no punctuation for easier guessing
 for(i=0;i<tracks.length;i++){
-     punctuationless = tracks[i].replace(/[.,\/#!?’$%\^&\*;:{}=\-_`~()]/g,"");
+     punctuationless1 = tracks[i].replace(/-/g," ");
+     punctuationless = punctuationless1.replace(/[.,\/#!?’$%\^&\*;:'{}=\‐_`~()]/g,"");
      tracksNoPunctuation[i] = punctuationless.replace(/\s{2,}/g," ");
 }
+
 var trackGuesses = new Array();
 var discTrackNumbers = new Array();
 if(discString.substring(0,1) > 1){
@@ -96,6 +98,12 @@ originalTracks = tracks.slice(0); //store Arrays for reset
 originalAltTitles = alternateTitles.slice(0);
 originalNoPunctuation = tracksNoPunctuation.slice(0);
 originalAltNoPunctuation  = altTracksNoPunctuation.slice(0);
+
+console.log(originalTracks);
+console.log(originalAltTitles);
+console.log(originalNoPunctuation);
+console.log(originalAltNoPunctuation);
+
 finalResultString = "";
 finishTime = 0;
 ranOnceAtGameOver = false;
