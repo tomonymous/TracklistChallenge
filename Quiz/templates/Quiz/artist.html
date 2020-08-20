@@ -1,17 +1,17 @@
 {% extends 'Quiz/base.html' %}
 
 {% block content %}
-    <h2 class="my-3" style="  text-align: center; font-size: 30px">Select Album</h2>
+    <h2 class="my-3" style="  font-family: 'CrimsonText-Bold';text-align: center; font-size: 30px">Select Album</h2>
     <div class="row">
         {% for album in albums %}
             <div class="card-columns mx-auto d-flex justify-content-center ">      
-                <div class="card text-white  mb-3 mx-1" style="width: 10rem; border-color: #ff9800;">
+                <div class="card text-white  mb-3 mx-1" style="width: 12rem; border-color: #ff9800;">
                     <div class="card-body">
                         <form  action="quiz" >
                             <input type="hidden" name="album_id" value="{{ album.album_id }}" >
-                            <button class="btn btn-primary stretched-link" style="font-family: Helvetica Neue; font-size:large; width: 100%; outline: 0; border: none; background-color: transparent; color:whitesmoke" type="submit">{{ album.title }}</button>
+                            <button class="btn btn-primary stretched-link" style="font-family: 'CrimsonText-Bold'; font-size:larger;  line-height:80%; width: 100%; outline: 0; border: none; background-color: transparent; color:whitesmoke" type="submit">{{ album.title }}</button>
                         </form>
-                        <p class="card-text" style="font-family: Helvetica Neue; color:salmon; text-align: center">{{ album.type | add:album.date }}</p>
+                        <p class="card-text" style="font-family: 'CrimsonText-Regular'; color:salmon; text-align: center; font-size: small;">{{ album.type | add:album.date }}</p>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
   
     <meta property="og:description" content="How many tracks from {{ artist }}'s Albums can you name?">
     <meta name="description" content="How many tracks from {{ artist }}'s Albums can you name?">
-
+    <meta property="og:image" content="{{ image }}"/>
     <!-- <meta property="og:image" content="{{ cover }}"/> -->
     <title>The Tracklist Challenge</title>
 {% endblock %}

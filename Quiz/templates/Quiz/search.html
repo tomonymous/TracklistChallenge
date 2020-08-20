@@ -1,7 +1,7 @@
 {% extends 'Quiz/base.html' %}
 
 {% block content %}
-    <h2 class="my-3" style="  text-align: center; font-size: 30px">Select Artist</h2>
+    <h2 class="my-3" style="  text-align: center; font-family: 'CrimsonText-Bold';font-size: 30px">Select Artist</h2>
     <div class="row">
         {% for artist in artists %}
             <div class="card-columns mx-auto d-flex justify-content-center ">   
@@ -9,9 +9,9 @@
                     <div class="card-body">
                         <form  action="artist" >
                             <input type="hidden" name="artist_query" value="{{ artist.artist_id }}" >
-                            <button class="btn btn-primary stretched-link" style="font-family: Helvetica Neue; font-size:large; width: 100%; outline: 0; border: none; background-color: transparent; color:whitesmoke" type="submit">{{ artist.name }}</button>
+                            <button class="btn btn-primary stretched-link" style="font-family: 'CrimsonText-Bold'; font-size:larger;  line-height:80%; width: 100%; outline: 0; border: none; background-color: transparent; color:whitesmoke" type="submit">{{ artist.name }}</button>
                         </form>
-                        <p class="card-text" style="font-family: Helvetica Neue; color:salmon; text-align: center">{{ artist.type | add:artist.area }}</p>
+                        <p class="card-text" style="font-family: 'CrimsonText-Regular'; color:salmon; text-align: center; font-size: small;">{{ artist.type | add:artist.area }}</p>
                      </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
     <meta name="title" content="The Tracklist Challenge">
 
     <meta property="og:title" content="The Tracklist Challenge">
-  
+    <meta property="og:image" content="{% static 'Tracklist Challenge Logo.jpg' %}"/>
     <meta property="og:description" content="How many tracks from {{ searchString }}'s Albums can you name?">
     <meta name="description" content="How many tracks from {{ searchString }}'s Albums can you name?">
 

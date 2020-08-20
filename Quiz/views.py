@@ -51,7 +51,12 @@ def artist(request):
         albums.append(new_album)
 
     # albums.sort(key=lambda albums: albums.date, reverse=True)
-    return render(request, 'Quiz/artist.html', {'albums': albums, 'artist':artist})
+    try:
+        image_list = musicbrainzngs.get_release_group_image_list(results["artist"]["release-group-list"][0]['id'])
+        image_url = image_list['images'][0]['thumbnails']['large']
+    except:
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
+    return render(request, 'Quiz/artist.html', {'albums': albums, 'artist':artist, 'image':image_url})
 
 
 

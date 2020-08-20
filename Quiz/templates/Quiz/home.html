@@ -9,6 +9,7 @@
   <meta name="title" content="The Tracklist Challenge">
   <meta property="og:title" content="The Tracklist Challenge">
   <meta property="og:description" content="How many tracks from your favourite Albums can you name?">
+  <meta property="og:image" content="{% static 'Tracklist Challenge Logo.jpg' %}"/>
   <meta name="description" content="How many tracks from your favourite Albums can you name?">
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
   <title>The Tracklist Challenge</title>
@@ -19,14 +20,14 @@
 
 <body class="bg-dark d-flex align-items-center min-vh-100">
     <div class="container text-center">
-        <div class="row">
+        <div class="row mb-0">
             <div class="navbar-header my-0">
-                <a class="navbar-brand" style="font-family: Helvetica Neue; font-size: 32px;" href='/'>The Tracklist Challenge.</a>
+                <a class="navbar-brand mb-0" style="font-family:'CrimsonText-Bold'; vertical-align:0px; font-size: 42px;" href='/'>The Tracklist Challenge.</a>
             </div>
             
         </div>
-        <p class="description" style="font-family: Helvetica Neue; color: salmon;font-size: 17px;">How well do you really know your favourite Albums? 
-            How many Tracks could you list with a time limit? <br> You have 8 seconds per song. Get to it!</p>
+        <p class="description mt-0" style="font-family: 'CrimsonText-Regular'; color: salmon;font-size: 17px;">How well do you really know your favourite Albums?<br> 
+         How many Tracks could you list with a time limit? You have 8 seconds per song. Get to it!</p>
         <form class="form-inline mx-0" action="search" style='display:inline-block;'>
             <input class="form-control ml-1 mr-0 "style="height:30px; display:inline-block" type="search" placeholder="Find Artist" aria-label="Search" name="query">
             <button class="btn btn-outline-warning my-2 my-sm-0 mx-0 inline" style="height:30px; display:inline-block; padding:0px 5px"type="submit">Go</button>
