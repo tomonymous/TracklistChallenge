@@ -41,11 +41,11 @@
   @font-face {
     font-family: 'CrimsonText-Bold';
     src: local('CrimsonText-Bold'),
-         url('CrimsonText-Regular.ttf') format("truetype");
+         url('../fonts/CrimsonText-Bold.ttf') format("truetype");
   }
 
   @font-face {
     font-family: 'CrimsonText-Regular';
     src: local('CrimsonText-Regular'),
-         url('CrimsonText-Regular.ttf') format("truetype");
+         url('../fonts/CrimsonText-Regular.ttf') format("truetype");
   }
