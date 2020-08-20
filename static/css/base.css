@@ -9,11 +9,11 @@
 @font-face {
     font-family: 'CrimsonText-Bold';
     src: local('CrimsonText-Bold'),
-         url('../static/fonts/CrimsonText-Bold.ttf') format("truetype");
+         url('CrimsonText-Regular.ttf') format("truetype");
   }
 
   @font-face {
     font-family: 'CrimsonText-Regular';
     src: local('CrimsonText-Regular'),
-         url('../static/fonts/CrimsonText-Regular.ttf') format("truetype");
+         url('CrimsonText-Regular.ttf') format("truetype");
   }
