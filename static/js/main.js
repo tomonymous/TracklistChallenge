@@ -56,8 +56,8 @@ var discTrackNumbers = new Array();
 if(discString.substring(0,1) > 1){
     discTrackNumbers = discString.split("X");
 }
-console.log(trackGuesses);
-check for parenthesis (alternate titles). Creates separate entites to check and stores track number.
+//console.log(trackGuesses);
+//check for parenthesis (alternate titles). Creates separate entites to check and stores track number.
 alternateTitles = new Array();
 for(i = 0; i< tracks.length; i++){
     if(tracks[i].includes('(')){
@@ -96,8 +96,8 @@ finishTime = 0;
 ranOnceAtGameOver = false;
 answersVisable = false;
 
-console.log(originalTracks); 
-console.log(originalAltTitles);
+//console.log(originalTracks); 
+//console.log(originalAltTitles);
 
 // Initialise Game
 function init() {
