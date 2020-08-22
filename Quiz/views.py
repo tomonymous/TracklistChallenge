@@ -32,13 +32,24 @@ def search(request):
             new_artist.area = ""
         new_artist.image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
         artists.append(new_artist)
-    return render(request, 'Quiz/search.html', {'artists': artists, 'searchString': query})
+    if len(artists) == 0:
+        isEmpty = True
+    else:
+        isEmpty = False
+    return render(request, 'Quiz/search.html', {'artists': artists, 'searchString': query, 'empty':isEmpty})
 
 def artist(request):
     query = request.GET.get('artist_query')
     if len(query) < 1:
-        query='a74b1b7f-71a5-4011-9441-d0b5e4122711'
-    results = musicbrainzngs.get_artist_by_id(query, includes=["release-groups"], release_type=["album", "ep"])
+        query='69ee3720-a7cb-4402-b48d-a02c366f2bcf'
+    if "/artist/" in query:
+        query = query[query.find("/artist/")+8:]
+    try:
+        results = musicbrainzngs.get_artist_by_id(query, includes=["release-groups"], release_type=["album", "ep"])
+        error = False
+    except:
+        results = musicbrainzngs.get_artist_by_id('69ee3720-a7cb-4402-b48d-a02c366f2bcf', includes=["release-groups"], release_type=["album", "ep"])
+        error = True
     artist = results["artist"]["name"]
     albums = []
     for release_group in results["artist"]["release-group-list"]:
@@ -51,22 +62,69 @@ def artist(request):
         albums.append(new_album)
 
     # albums.sort(key=lambda albums: albums.date, reverse=True)
+    if len(albums) == 0:
+        isEmpty = True
+    else:
+        isEmpty = False
     try:
         image_list = musicbrainzngs.get_release_group_image_list(results["artist"]["release-group-list"][0]['id'])
         image_url = image_list['images'][0]['thumbnails']['large']
     except:
         image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
-    return render(request, 'Quiz/artist.html', {'albums': albums, 'artist':artist, 'image':image_url})
+    return render(request, 'Quiz/artist.html', {'albums': albums, 'artist':artist, 'image':image_url, 'empty':isEmpty, 'error':error})
 
 
 
 def quiz(request):
     query = request.GET.get('album_id')
-    release_group = musicbrainzngs.get_release_group_by_id(query, includes=['releases'])
+    try:
+        if "/release/" in query:
+            release_id = query[query.find("/release/")+9:]
+            release = musicbrainzngs.get_release_by_id(release_id, includes=['recordings', 'artists'])
+        else:
+            if "/release-group/" in query:
+                release_group_id = query[query.find("/release-group/")+15:]
+                release_group = musicbrainzngs.get_release_group_by_id(release_group_id, includes=['releases'])
+                release = get_release_from_release_group(release_group)
+            else:
+                try:
+                    release_group = musicbrainzngs.get_release_group_by_id(query, includes=['releases'])
+                    release = get_release_from_release_group(release_group)
+                except:
+                    release = musicbrainzngs.get_release_by_id(query, includes=['recordings', 'artists'])
+        error = False
+    except:
+        release = musicbrainzngs.get_release_by_id("a1170afd-e95f-3975-ad26-e04c70d6a42b", includes=['recordings', 'artists'])
+        error = True
+    try:
+        image_list = musicbrainzngs.get_image_list(release['release']['id'])
+        image_url = image_list['images'][0]['thumbnails']['large']
+    except:
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
+    title = release['release']['title']
+    try:
+        artist = release['release']['artist-credit'][0]['artist']['name']
+    except:
+        artist = "Unknown"
+    tracks = []
+    discs = len(release['release']['medium-list'])
+    discInfoString = str(discs)
+    for i in range(0, discs):
+        discInfoString += "X" + str(len(release['release']['medium-list'][i]['track-list']))
+        for track in release['release']['medium-list'][i]['track-list']:
+            tracks.append(track['recording']['title'])
+
+    json_tracks = json.dumps(tracks)
+    return render(request, 'Quiz/quiz.html', {'tracks': json_tracks, 'cover': image_url, 'title': title, 'artist': artist, 'discs': discInfoString, 'album_id':query, 'error':error})
+
+def get_release_from_release_group(release_group):
     release_index = 0
+    acceptable_index = -1
     for release in release_group['release-group']['release-list']: #avoid deluxe editions with additional tracks. 
         if "deluxe" in release['title'].lower() or "special edition" in release['title'].lower():
             release_index += 1
+        elif release['quality'].lower() == 'high':
+            break
         else:
             try:
                 disambiguation = release['disambiguation'].lower()
@@ -77,33 +135,14 @@ def quiz(request):
             elif disambiguation.find('special') > -1:
                     release_index +=1
             else:
-                break
+                if(acceptable_index<0):
+                    acceptable_index = release_index
+                release_index +=1
             
     if release_index >= len(release_group['release-group']['release-list']):
-        release_index = 0
-    
+        release_index = acceptable_index
     release = musicbrainzngs.get_release_by_id(release_group['release-group']['release-list'][release_index]['id'], includes=['recordings', 'artists'])
-    title = release_group['release-group']['release-list'][release_index]['title']
-    try:
-        artist = release['release']['artist-credit'][0]['artist']['name']
-    except:
-        artist = "Unknown"
-    try:
-        image_list = musicbrainzngs.get_release_group_image_list(query)
-        image_url = image_list['images'][0]['thumbnails']['large']
-    except:
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
-    tracks = []
-    discs = len(release['release']['medium-list'])
-    discInfoString = str(discs)
-    for i in range(0, discs):
-        discInfoString += "X" + str(len(release['release']['medium-list'][i]['track-list']))
-        for track in release['release']['medium-list'][i]['track-list']:
-            tracks.append(track['recording']['title'])
-
-    json_tracks = json.dumps(tracks)
-    return render(request, 'Quiz/quiz.html', {'tracks': json_tracks, 'cover': image_url, 'title': title, 'artist': artist, 'discs': discInfoString, 'album_id':query})
-
+    return release
 
 def album_search(request):
     query = request.GET.get('query')
@@ -129,8 +168,11 @@ def album_search(request):
         new_album.image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
         albums.append(new_album)
 
-    
-    return render(request, 'Quiz/albums.html', {'albums': albums, 'searchString': query})
+    if len(albums) == 0:
+        isEmpty = True
+    else:
+        isEmpty = False
+    return render(request, 'Quiz/albums.html', {'albums': albums, 'searchString': query, 'empty':isEmpty})
 
 def getAlbumArt(request):
     if request.is_ajax and request.method == "GET":

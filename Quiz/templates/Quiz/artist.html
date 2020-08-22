@@ -1,7 +1,13 @@
 {% extends 'Quiz/base.html' %}
 
 {% block content %}
-    <h2 class="my-3" style="  font-family: 'CrimsonText-Bold';text-align: center; font-size: 30px">Select Album</h2>
+    {% if error %}
+    <p style="font-family: 'CrimsonText-Regular';text-align: center;">Sorry, something went wrong with your request. Please try again. Alternatively, here's The Cure:</p>
+    {% endif%}
+    <h2 class="my-3" style="  font-family: 'CrimsonText-Bold';text-align: center; font-size: 30px">{{ artist }}: Select Album</h2>
+    {% if empty %}
+    <p style="font-family: 'CrimsonText-Regular';text-align: center;">No Albums found.</p>
+    {% endif%}
     <div class="row">
         {% for album in albums %}
             <div class="card-columns mx-auto d-flex justify-content-center ">      
@@ -16,6 +22,17 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+    <div class="row my-4">
+        <div class="col-md-12 mx-auto">
+            <p class="mb-1" style="font-family: 'CrimsonText-Regular';text-align: center; line-height:94%;">Can't find what you are looking for?<br>Find it on musicbrainz.org and then paste the release or release group URL here:</p>
+            <div class="col-md-6 div-wrapper mx-auto d-flex justify-content-center align-items-center">
+                <form class="form-inline mx-0" action="quiz" style='display:inline-block;text-align: center'>
+                    <input class="form-control"style="height:30px; display:inline-block" type="search" placeholder="Enter URL or ID" aria-label="Search" name="album_id">
+                    <button class="btn btn-outline-warning my-2 my-sm-0 mx-0 inline" style="height:30px; display:inline-block; padding:0px 5px"type="submit">Go</button>
+                </form>
+            </div>
+        </div>
     </div>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/css/cards.css' %}">

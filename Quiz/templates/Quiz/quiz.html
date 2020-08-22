@@ -3,11 +3,15 @@
 <body class="bg-dark text-white">
     <div class="container text-center">
       <div class="row">
+
         <div class="col-md-12">
+          {% if error %}
+            <p style="font-family: 'CrimsonText-Regular';text-align: center;">Sorry, something went wrong with your request. You're on The Dark Side of the Moon.</p>
+          {% endif%}
           <img src="{{ cover }}" class="img-fluid" width="400px" id="album-container" alt="Album Cover">
         </div>
         <div class="col-md-6 mx-auto">
-          <p class="lead" id="album-title" style="font-family: 'CrimsonText-Bold'; font-size: 24px; margin:0px">{{ title }}</p>
+          <p class="lead mt-1" id="album-title" style="font-family: 'CrimsonText-Bold'; font-size: 24px; margin:0px">{{ title }}</p>
           <!-- Song Display -->
           <p  id="track-list-guesses"></p>
           <!-- Instructions -->
