@@ -427,7 +427,7 @@ function stripThe(phrase){
 
 function stripPunctuation(phrase){
     punctuationless1 = phrase.replace(/-/g," ");
-    punctuationless = punctuationless1.replace(/[.…,\/#!?’‘”“$%\^&\*;:'{}=\‐_`~()]/g,"");
+    punctuationless = punctuationless1.replace(/[.…,\/#!?’‘”″“$%\^&\*;:'{}=\‐_`~()]/g,"");
     return punctuationless.replace(/\s{2,}/g," ");
 }
 
