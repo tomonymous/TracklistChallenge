@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .models import Album, Artist
 import musicbrainzngs
 import json
+import requests
 
 musicbrainzngs.set_useragent("TestSearch", "0.1", "test.com")
 
@@ -77,6 +78,8 @@ def artist(request):
 
 def quiz(request):
     query = request.GET.get('album_id')
+    isGroup = False
+    release_group_id = ""
     try:
         if "/release/" in query:
             release_id = query[query.find("/release/")+9:]
@@ -86,10 +89,13 @@ def quiz(request):
                 release_group_id = query[query.find("/release-group/")+15:]
                 release_group = musicbrainzngs.get_release_group_by_id(release_group_id, includes=['releases'])
                 release = get_release_from_release_group(release_group)
+                isGroup = True
             else:
                 try:
                     release_group = musicbrainzngs.get_release_group_by_id(query, includes=['releases'])
+                    release_group_id = query
                     release = get_release_from_release_group(release_group)
+                    isGroup = True
                 except:
                     release = musicbrainzngs.get_release_by_id(query, includes=['recordings', 'artists'])
         error = False
@@ -97,10 +103,16 @@ def quiz(request):
         release = musicbrainzngs.get_release_by_id("a1170afd-e95f-3975-ad26-e04c70d6a42b", includes=['recordings', 'artists'])
         error = True
     try:
-        image_list = musicbrainzngs.get_image_list(release['release']['id'])
-        image_url = image_list['images'][0]['thumbnails']['large']
+        if isGroup and is_url_image("https://coverartarchive.org/release-group/"+release_group_id+"/front.jpg"):
+            image_url = "https://coverartarchive.org/release-group/"+release_group_id+"/front.jpg"
+        else:
+            image_list = musicbrainzngs.get_image_list(release['release']['id'])
+            image_url = image_list['images'][0]['thumbnails']['large']
     except:
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
+        if isGroup and is_url_image("https://coverartarchive.org/release-group/"+release_group_id+"/front.jpg"):
+            image_url = "https://coverartarchive.org/release-group/"+release_group_id+"/front.jpg"
+        else:
+            image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
     title = release['release']['title']
     try:
         artist = release['release']['artist-credit'][0]['artist']['name']
@@ -177,7 +189,6 @@ def album_search(request):
 def getAlbumArt(request):
     if request.is_ajax and request.method == "GET":
         query = request.GET.get('album_id')
-        print(query)
         try:
             image_list = musicbrainzngs.get_release_group_image_list(query)
             image_url = image_list['images'][0]['thumbnails']['large']
@@ -195,3 +206,15 @@ def sendID(request):
         except:
             image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
         return JsonResponse({"url":image_url}, status = 200)
+
+def is_url_image(image_url):
+    image_formats = ("image/png", "image/jpeg", "image/jpg")
+    r = requests.head(image_url)
+    if r.headers["Content-Type"] in image_formats:
+      return True
+    try:
+        if ".jpg" in r.headers["Location"]:
+            return True
+    except:
+        return False
+    return False
