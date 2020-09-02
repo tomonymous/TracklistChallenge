@@ -82,12 +82,23 @@ for(i = 0; i< tracks.length; i++){
             }
         }
     }
+    if(tracks[i].includes(', Part')){
+        splitTracks = tracks[i].split(',');
+        for(h=0; h<splitTracks.length; h++){
+            if(!splitTracks[h].includes('Part')){
+                alternateTitles[alternateTitles.length] = new AlternateTitle(i, splitTracks[h]);
+                includesParenthesis = true;
+                if(splitTracks[h].includes('&')){
+                    alternateTitles[alternateTitles.length] = new AlternateTitle(i, splitTracks[h].replace(/&/g, ' and ').replace(/\'  \'/g, ' '));
+                }
+            }
+        }
+    }
     if(tracks[i].includes('&')){
         alternateTitles[alternateTitles.length] = new AlternateTitle(i, tracks[i].replace(/&/g, ' and ').replace(/\'  \'/g, ' '));
         includesParenthesis = true;
     }
 }
-
 originalTracks = tracks.slice(0); //store Arrays for reset
 originalAltTitles = alternateTitles.slice(0);
 
