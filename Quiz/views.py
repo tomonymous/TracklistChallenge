@@ -109,10 +109,7 @@ def quiz(request):
             image_list = musicbrainzngs.get_image_list(release['release']['id'])
             image_url = image_list['images'][0]['thumbnails']['large']
     except:
-        if isGroup and is_url_image("https://coverartarchive.org/release-group/"+release_group_id+"/front.jpg"):
-            image_url = "https://coverartarchive.org/release-group/"+release_group_id+"/front.jpg"
-        else:
-            image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Album_cover_with_notes_03.svg/240px-Album_cover_with_notes_03.svg.png"
     title = release['release']['title']
     try:
         artist = release['release']['artist-credit'][0]['artist']['name']
@@ -214,6 +211,8 @@ def is_url_image(image_url):
       return True
     try:
         if ".jpg" in r.headers["Location"]:
+            return True
+        if ".png" in r.headers["Location"]:
             return True
     except:
         return False

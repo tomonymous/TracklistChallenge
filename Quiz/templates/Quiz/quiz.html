@@ -8,6 +8,7 @@
           {% if error %}
             <p style="font-family: 'CrimsonText-Regular';text-align: center;">Sorry, something went wrong with your request. You're on The Dark Side of the Moon.</p>
           {% endif%}
+          <p class="lead mt-1" id="album-title" style="font-family: 'CrimsonText-Bold'; font-size: 24px; margin:0px">The Tracklist Quiz:<br>'{{ title }}' by {{ artist }}</p>
           <img src="{{ cover }}" class="img-fluid" width="400px" id="album-container" alt="Album Cover">
         </div>
         <div class="col-md-6 mx-auto">
@@ -18,8 +19,8 @@
           <div id="instructions-panel" class="row">
             <div class="col-md-12">
               <div class="display-box">
-                <p class="mb-1"style=" font-family: 'CrimsonText-Regular'; font-size: large;">List as many tracks as you can before the time runs out. You have 
-                  <span id="instructions-time">0</span> (8 seconds per Song). The timer starts when you start typing.</p>
+                <p class="mb-1"style=" font-family: 'CrimsonText-Regular'; font-size: large;">List as many tracks as you can before the time runs out. 
+                  <span id="instructions-time"></span> The timer starts when you start typing.</p>
                   <button id="start-button" class="btn warning mb-1 mt-0" onclick="goToGame()">Let's Go!</button>
               </div>
             </div>

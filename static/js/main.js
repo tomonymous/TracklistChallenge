@@ -108,7 +108,7 @@ function init() {
     uiPanel.style.display = "none";
     songInput.style.display = "none";
     songInput.value = '';
-    timeString.innerHTML = timeConverter(time);
+    timeString.innerHTML = " You have "+timeConverter(time)+" (8 seconds per Song).";
     displayHiddenTracks();
     if(artist == 'Unknown'){
         cheatMessage.innerHTML = album + '\'s creator';
