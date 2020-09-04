@@ -26,6 +26,7 @@ const title = document.querySelector('#album-title');
 const timeString = document.querySelector('#instructions-time');
 
 answersButton = document.getElementById("answers_button");
+startButton = document.getElementById("start-button");
 giveUpButton = document.getElementById("giveup-button");
 resetButton = document.getElementById("reset-button");
 discString = document.getElementById("disc_string").value;
@@ -155,12 +156,17 @@ function timeConverter(seconds){
 }
 
 function goToGame(){
-    uiPanel.style.display = "block";
-    songInput.style.display = "block";
-    songInput.focus();
-    instructions.style.display = "none";
-    timeDisplay.innerHTML  = "TIME: " + timeConverter(time);
-    giveUpButton.scrollIntoView();
+    if(tracklistDisplay.innerHTML  == ""){
+        startButton.innerHTML = "Loading..Try Again"
+    }
+    else{
+        uiPanel.style.display = "block";
+        songInput.style.display = "block";
+        songInput.focus();
+        instructions.style.display = "none";
+        timeDisplay.innerHTML  = "TIME: " + timeConverter(time);
+        giveUpButton.scrollIntoView();
+    }
 }
 
 function startMatch(){

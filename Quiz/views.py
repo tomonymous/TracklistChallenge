@@ -6,7 +6,7 @@ import musicbrainzngs
 import json
 import requests
 
-musicbrainzngs.set_useragent("TestSearch", "0.1", "test.com")
+musicbrainzngs.set_useragent("TracklistChallenge", "1.0", "TracklistChallenge.com")
 
 # Create your views here.
 
@@ -196,7 +196,6 @@ def getAlbumArt(request):
 def sendID(request):
     if request.is_ajax and request.method == "POST":
         query = request.GET.get('album_id')
-        print(query)
         try:
             image_list = musicbrainzngs.get_release_group_image_list(query)
             image_url = image_list['images'][0]['thumbnails']['large']
