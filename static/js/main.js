@@ -83,6 +83,16 @@ for(i = 0; i< tracks.length; i++){
             }
         }
     }
+    if(tracks[i].includes('—')){
+        splitTracks = tracks[i].split('—');
+        for(h=0; h<splitTracks.length; h++){
+            alternateTitles[alternateTitles.length] = new AlternateTitle(i, splitTracks[h]);
+            includesParenthesis = true;
+            if(splitTracks[h].includes('&')){
+                alternateTitles[alternateTitles.length] = new AlternateTitle(i, splitTracks[h].replace(/&/g, ' and ').replace(/\'  \'/g, ' '));
+            }
+        }
+    }
     if(tracks[i].includes(', Part')){
         splitTracks = tracks[i].split(',');
         for(h=0; h<splitTracks.length; h++){
